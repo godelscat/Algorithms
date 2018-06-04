@@ -1,0 +1,7 @@
+#C++
+*.a
+*.out
+*.exe
+
+#Python
+__pycache__/
