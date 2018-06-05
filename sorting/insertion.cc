@@ -11,7 +11,7 @@ void insert_sorting(T *arr, int size){
 		for (j = 1; j < size; ++j){
 			key = arr[j];
 			i = j - 1;
-			while (arr[i] > key){
+			while (arr[i] > key && i>=0){
 				arr[i+1] = arr[i];
 				i = i - 1;
 			}
