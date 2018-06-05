@@ -1,4 +1,4 @@
-def insert_sorting(arr):
+def incre_sorting(arr):
     for j in range(1, len(arr)):
         key = arr[j]
         i = j -1
@@ -7,7 +7,19 @@ def insert_sorting(arr):
             i = i-1
         arr[i+1] = key
 
-testArr = [5, 2, 3, 7, 1]
+def decre_sorting(arr):
+    for j in range(1, len(arr)):
+        key = arr[j]
+        i = j - 1
+        while i >= 0 and arr[i] < key:
+            arr[i+1] = arr[i]
+            i = i - 1
+        arr[i+1] = key
 
-insert_sorting(testArr)
-print(testArr)
+testArr1 = [5, 2, 3, 7, 1]
+testArr2 = [5, 2, 3, 7, 1]
+
+incre_sorting(testArr1)
+decre_sorting(testArr2)
+print(testArr1)
+print(testArr2)
