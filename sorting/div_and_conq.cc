@@ -1,3 +1,4 @@
+//divide and conquer algorithm for sorting 
 #include<iostream>
 using namespace std;
 
@@ -38,12 +39,23 @@ void MERGE(T *arr, int p, int q, int r){
 	}
 }
 
+template<class T>
+void MERGE_SORT(T *arr, int p, int r){
+	if ( p < r ) {
+		int q = (p+r)/2;
+		//divide
+		//conquer recursively
+		MERGE_SORT(arr, p, q);
+		MERGE_SORT(arr, q+1, r);
+		//combine 
+		MERGE(arr, p, q, r);
+	}
+}
 
 int main()
 {
-	int testArr[] = {2,4,5,7,1,2,3,6};
-	//p start from 0; r end end by length-1
-	MERGE<int>(testArr, 0, 3, 7);
+	int testArr[] = {4,5,7,1,2,3,6};
+	MERGE_SORT<int>(testArr, 0, 6);
 	for (auto c : testArr)
 		cout << c << endl;
 	return 0;
