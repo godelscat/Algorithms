@@ -2,7 +2,6 @@
 #include <algorithm>
 using namespace std;
 
-
 int max (int arr[], int len) {
 	int l = arr[0];
 	for (int i = 0; i < len; ++i){
@@ -31,7 +30,7 @@ int main ()
 	int len = sizeof(testArr)/sizeof(*testArr);
 	int k = max (testArr, len);
 	int storedArr[len] = {};
-	countSort (testArr,storedArr, k, len);
+	countSort (testArr, storedArr, k, len);
 	for (auto c : storedArr) cout << c << endl;
 	return 0;
 }
