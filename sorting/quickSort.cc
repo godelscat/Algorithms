@@ -1,9 +1,18 @@
+//worst time cost is O(n^2)
+//mean time cost is close to best one , O(nlgn)
+//randomize input element
 #include <iostream>
 #include <algorithm>
+#include <random>
 using namespace std;
 
 template <class T>
 int Partition (T arr[], int p, int r) {
+	random_device rd;
+	mt19937 gen(rd());
+	uniform_int_distribution<int> dis(p, r);
+	int x  = dis(gen);
+	swap (arr[x], arr[r]);
 	T pivot_elem = arr[r];
 	int j = p - 1;
 	for (int i = p; i < r; i++) {
