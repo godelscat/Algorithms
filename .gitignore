@@ -2,6 +2,7 @@
 *.a
 *.out
 *.exe
+*.gch
 
 #Python
 __pycache__/
