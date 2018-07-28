@@ -13,6 +13,7 @@ class cirQueue {
 	public :
 		T *arr = new T[maxSize];
 		cirQueue (int n);
+		~cirQueue ();
 		bool isFull ();
 		bool isEmpty ();
 		void EnQueue (T elem);
@@ -24,6 +25,11 @@ cirQueue<T>::cirQueue (int n) {
 	maxSize = n;
 	head = arr;
 	tail = arr;
+}
+
+template <class T>
+cirQueue<T>::~cirQueue() {
+	delete[] arr;
 }
 
 template <class T>
