@@ -1,5 +1,5 @@
 #include <iostream>
-#include "mylist.h"
+#include "mylist2.h"
 using namespace std;
 
 int main ()
