@@ -3,6 +3,7 @@
 *.out
 *.exe
 *.gch
+*.json
 
 #Python
 __pycache__/
