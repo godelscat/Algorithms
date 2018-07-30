@@ -21,11 +21,13 @@ int main ()
 	testHeap1.insert (9);
 	testHeap1.insert (4);
 	testHeap1.insert (8);
-	testHeap1.insert (3);
+	testHeap1.insert (3);	
 	cout << "head of testHeap1: " << testHeap1.head << endl;	
+	testHeap1.show();
 
 	Heap testMerge;
 	testMerge.merge( testHeap.head, testHeap1.head);
+	cout << "head of testMerge: " << testMerge.head << endl;
 	testMerge.show();
 	
 	return 0;

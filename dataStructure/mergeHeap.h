@@ -64,15 +64,15 @@ int Heap::extractMin () {
 }
 
 void Heap::merge ( node* head1, node* head2 ) {
-	node* temph = new node;
-	node* temp = temph->next;
-	while ( head1 != nullptr && head2 != nullptr ) {
+	node nil;
+	node* temp = &nil;
+ 	while ( head1 != nullptr && head2 != nullptr ) {
 		if ( head1->key < head2->key ) {
-			temp = head1;
+			temp->next = head1;
 			head1 = head1->next;
 			temp = temp->next;
 		} else {
-			temp = head2;
+			temp->next = head2;
 			head2 = head2->next;
 			temp = temp->next;
 		}
@@ -80,8 +80,7 @@ void Heap::merge ( node* head1, node* head2 ) {
 	}
 	if ( head1 != nullptr ) temp->next = head1;
 	else temp->next = head2;
-	head = temph->next;
-	delete temph;
+	head = nil.next;
 }
 
 void Heap::show () {
