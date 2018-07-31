@@ -44,13 +44,15 @@ void list::insert (int x) {
 
 //need to change when heads[0] = nullptr
 void list::merge (node* heads[], int num) {
-	head = heads[0];
-	node* temp = head;
-	for ( int i = 1 ; i < num; ++i) {
-	       	while (temp->next != nullptr) 
-			temp = temp->next;
-		temp->next = heads[i]; 		       
+	node nil;
+	node* temp = &nil;
+	for ( int i = 0; i < num; ++i) {
+			temp->next = heads[i]; 
+	       	while ( temp->next != nullptr ) {
+				   temp = temp->next;
+			}
 	}
+	head = nil.next;
 }
 
 
