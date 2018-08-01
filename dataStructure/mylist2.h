@@ -35,12 +35,12 @@ doublyList<T>::doublyList() {
 template <class T>
 doublyList<T>::~doublyList() {
 	node<T>* temp = nil;
-	while (nil->next != nil) {
-		temp = nil->next;
-		nil->next = nil->next->next;
-		delete temp;
+	node<T>* current = nil;
+	while (current->next != nil) {
+		temp = current->next;
+		delete current;
+		current = temp;
 	}
-	delete nil;
 }
 
 template <class T>

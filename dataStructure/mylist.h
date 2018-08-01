@@ -30,11 +30,12 @@ doublyList<T>::doublyList() {
 
 template <class T>
 doublyList<T>::~doublyList() {
-	node<T>* temp = nullptr;
-	while (head != nullptr) {
-		temp = head;
-		head = head->next;
-		delete temp;
+	node<T>* temp = head;
+	node<T>* current = head;
+	while (current != nullptr) {
+		temp = current->next;
+		delete current;
+		current = temp;
 	}
 }
 
