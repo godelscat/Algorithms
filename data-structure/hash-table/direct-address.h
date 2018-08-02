@@ -1,6 +1,8 @@
 #ifndef DIRECT_ADDRESS_H
 #define DIRECT_ADDRESS_H
 #include <iostream>
+#include <memory>
+#define MAX 10
 
 struct node {
 	int key;
@@ -12,23 +14,13 @@ namespace myhash
 {
 	class hash {
 		private :
-			const int MAX = 10;	
-			node **arr = new node*[MAX];
+			//it's safe to use make_unique
+			std::unique_ptr<node* []> arr = std::make_unique<node *[]> (MAX);
 		public :
-			hash ();
-			~hash ();
 			int search ( int k );
 			void insert ( node &n );
 			void del ( node &n );
 	};
-
-	hash::hash(){
-		arr[MAX] = {};
-	}
-
-	hash::~hash() {
-		delete [] arr;
-	}
 
 	int hash::search ( int k ) {
 		if ( arr[k] == nullptr ) throw std::invalid_argument ("NO SUCH KEY!");
