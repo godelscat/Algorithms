@@ -31,8 +31,11 @@ namespace myhash
 	}
 
 	int hash::search ( int k ) {
-		int x = arr[k]->val;
-		return x;
+		if ( arr[k] == nullptr ) throw std::invalid_argument ("NO SUCH KEY!");
+		else {
+			int x = arr[k]->val;
+			return x;
+		}
 	}
 
 	void hash::insert ( node &n ) {

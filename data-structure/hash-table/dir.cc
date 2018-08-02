@@ -12,6 +12,9 @@ int main ()
 	h.insert ( n4 );
 	int k = h.search (6);
 	cout << k << endl;
+	h.del ( n2 );
+	int k2 = h.search (3);
+	cout << k2 << endl;
 	return 0;
 }
 
