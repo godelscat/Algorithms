@@ -1,5 +1,5 @@
 #include <iostream>
-#include "mylist2.h"
+#include "mylist_v2.h"
 using namespace std;
 
 int main ()
@@ -10,7 +10,7 @@ int main ()
 	testList.ListInsert(16);
 	testList.ListInsert(9);
 	testList.ListShow();
-	node<int>* a = testList.ListSearch(16);
+	shared_ptr<node<int>> a = testList.ListSearch(16);
 	testList.ListDelete(a);
 	cout << "after delete" << endl;
 	testList.ListShow();
