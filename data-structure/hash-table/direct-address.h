@@ -15,7 +15,8 @@ namespace myhash
 	class hash {
 		private :
 			//it's safe to use make_unique
-			std::unique_ptr<node* []> arr = std::make_unique<node *[]> (MAX);
+			//std::unique_ptr<node* []> arr = std::make_unique<node *[]> (MAX);
+			std::array <std::unique_ptr<node>, MAX> arr;
 		public :
 			int search ( int k );
 			void insert ( node &n );
@@ -31,7 +32,7 @@ namespace myhash
 	}
 
 	void hash::insert ( node &n ) {
-		arr[n.key] = &n;
+		arr[n.key] = std::make_unique<node>(n.key, n.val);
 	}
 
 	void hash::del ( node &n ) {
