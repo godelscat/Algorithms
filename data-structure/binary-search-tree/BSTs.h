@@ -34,7 +34,7 @@ namespace BSTs
     void tree::inorder( sptr n ) {
         if ( n != nullptr ) {
             inorder ( n->left );
-            std::cout << root->key << " " << root->val << std::endl;
+            std::cout << n->key << " " << n->val << std::endl;
             inorder ( n->right ) ;
         }
     }
@@ -99,14 +99,14 @@ namespace BSTs
            else temp = temp->left; 
        }
        tempn->parent = temp1;
-       if ( temp1->key < n.key ) tempn = temp1->right;
-       else tempn = temp1->left;
+       if ( temp1->key < n.key ) temp1->right = tempn;
+       else  temp1->left = tempn;
     }
 
     void tree::del ( node &nd ) {
         sptr n = tree::search (nd.key);
         if ( n->left == nullptr &&  n->right == nullptr ) {
-            n = nullptr;
+            n.reset();
             return ;
         } 
         if ( n->left == nullptr || n->right == nullptr ) {
@@ -115,17 +115,19 @@ namespace BSTs
             else temp = n->left;
             if ( n->parent == nullptr ) {
                 root = temp ;
+                n.reset();
                 return ;
             }
             if ( n == n->parent->left ) n->parent->left = temp;
             else n->parent->right = temp;
             temp->parent = n->parent;
-            n = nullptr;
+            n.reset();
             return ;
         }
         sptr tempss = tree::ssor (n) ;
-        n = tempss;
-        tempss = nullptr;
+        n->key = tempss->key;
+        n->val = tempss->val;
+        tempss.reset();
         return ;
     }
 }
