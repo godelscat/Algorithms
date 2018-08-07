@@ -105,30 +105,20 @@ namespace BSTs
 
     void tree::del ( node &nd ) {
         sptr n = tree::search (nd.key);
-        if ( n->left == nullptr &&  n->right == nullptr ) {
-            n.reset();
-            return ;
-        } 
-        if ( n->left == nullptr || n->right == nullptr ) {
-            sptr temp ;
-            if ( n->left == nullptr ) temp = n->right;
-            else temp = n->left;
-            if ( n->parent == nullptr ) {
-                root = temp ;
-                n.reset();
-                return ;
-            }
-            if ( n == n->parent->left ) n->parent->left = temp;
-            else n->parent->right = temp;
-            temp->parent = n->parent;
-            n.reset();
-            return ;
+        sptr temp;
+        if ( n->left == nullptr || n->right == nullptr ) temp = n ;
+        else  temp = tree::ssor (n) ;
+        sptr x;
+        if ( temp->left == nullptr )  x = temp->right;
+        else x = temp->left;
+        if ( x != nullptr ) x->parent = temp->parent;
+        if ( temp->parent == nullptr )  root = x;
+        else if ( temp == temp->parent->left ) temp->parent->left = x;
+        else temp->parent->right = x;
+        if ( temp != n ) {
+            n->key = temp->key;
+            n->val = temp->val;
         }
-        sptr tempss = tree::ssor (n) ;
-        n->key = tempss->key;
-        n->val = tempss->val;
-        tempss.reset();
-        return ;
     }
 }
 
