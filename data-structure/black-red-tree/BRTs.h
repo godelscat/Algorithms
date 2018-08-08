@@ -80,14 +80,14 @@ namespace BRTs
 
     void tree::left_rotate (sptr n) {
         //n is the root node of rotating subtree
-        sptr x = n->left; //right child to be rotated
+        sptr x = n->right; //right child to be rotated
         n->right = x->left;
         if (x->left != nil) x->left->parent = n;
         x->parent = n->parent;
         if ( n->parent == nil ) {
             root = x;
         } else {
-            if ( n = n->parent->left ) x = n->parent->left;
+            if ( n == n->parent->left ) x = n->parent->left;
             else x = n->parent->right;
         }
         n->parent = x;
@@ -96,14 +96,14 @@ namespace BRTs
 
     void tree::right_rotate(sptr n) {
         //n is the root node of rotating subtree
-        sptr x = n->right; //left child to be rotated
+        sptr x = n->left; //left child to be rotated
         n->left = x->right;
         if (x->right != nil) x->right->parent = n;
         x->parent = n->parent;
         if ( n->parent == nil ) {
             root = x;
         } else {
-            if ( n = n->parent->left ) x = n->parent->left;
+            if ( n == n->parent->left ) x = n->parent->left;
             else x = n->parent->right;
         }
         n->parent = x;
@@ -118,17 +118,17 @@ namespace BRTs
                 if ( ! uncle->color ) { 
                     n->parent->color = 1;
                     uncle->color = 1;
+                    n->parent->parent->color = 0;
                     n = n->parent->parent;
-                    n->parent->parent->color = 1;
-                    continue;
-                } //case 2 : uncle is black, and n is right child
+                } 
+                //case 2 : uncle is black, and n is right child
                 //after rotate, case 2 becomes case 3
-                if ( uncle->color && n == n->parent->right ) {
-                    n = n->parent;
-                    tree::left_rotate (n);
-                }
+                else { 
+                    if (  n == n->parent->right ) {
+                        n = n->parent;
+                        tree::left_rotate (n);
+                    }
                 //case 3 : uncle is black, and n is left child
-                if ( uncle->color && n == n->parent->left ) {
                     n->parent->color = 1;
                     n->parent->parent->color = 0;
                     right_rotate(n->parent->parent);
@@ -139,17 +139,17 @@ namespace BRTs
                 if ( ! uncle->color ) { 
                     n->parent->color = 1;
                     uncle->color = 1;
-                    n->parent->parent->color = 1;
+                    n->parent->parent->color = 0;
                     n = n->parent->parent;
-                    continue;
-                } //case 2 : uncle is black, and n is left child
+                } 
+                //case 2 : uncle is black, and n is left child
                 //after rotate, case 2 becomes case 3
-                if ( uncle->color && n == n->parent->left) {
-                    n = n->parent;
-                    tree::right_rotate(n);
-                }
+                else {
+                    if (  n == n->parent->left) {
+                        n = n->parent;
+                        tree::right_rotate(n);
+                    }
                 //case 3 : uncle is black, and n is right child
-                if ( uncle->color && n == n->parent->right) {
                     n->parent->color = 1;
                     n->parent->parent->color = 0;
                     left_rotate(n->parent->parent);
