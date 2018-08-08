@@ -86,10 +86,10 @@ namespace BRTs
         x->parent = n->parent;
         if ( n->parent == nil ) {
             root = x;
-        } else {
-            if ( n == n->parent->left ) x = n->parent->left;
-            else x = n->parent->right;
-        }
+        } else if ( n == n->parent->left ) {
+            n->parent->left = x ;
+        } else
+            n->parent->right = x;
         n->parent = x;
         x->left = n;
     }
@@ -102,10 +102,10 @@ namespace BRTs
         x->parent = n->parent;
         if ( n->parent == nil ) {
             root = x;
-        } else {
-            if ( n == n->parent->left ) x = n->parent->left;
-            else x = n->parent->right;
-        }
+        } else if ( n == n->parent->left ) {
+            n->parent->left = x;
+        } else 
+            n->parent->right = x;
         n->parent = x;
         x->right= n;
     }
@@ -115,7 +115,7 @@ namespace BRTs
             if ( n->parent == n->parent->parent->left ) {
                 sptr uncle = n->parent->parent->right;
                 // case 1 : uncle is red
-                if ( ! uncle->color ) { 
+                if ( (uncle != nil) && (! uncle->color) ) { 
                     n->parent->color = 1;
                     uncle->color = 1;
                     n->parent->parent->color = 0;
@@ -136,7 +136,7 @@ namespace BRTs
             } else {
                 sptr uncle = n->parent->parent->left;
                 // case 1 : uncle is red
-                if ( ! uncle->color ) { 
+                if ( (uncle != nil) && (! uncle->color)  ) { 
                     n->parent->color = 1;
                     uncle->color = 1;
                     n->parent->parent->color = 0;
