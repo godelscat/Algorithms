@@ -26,7 +26,7 @@ namespace BRTs
             sptr search (int k);
             sptr ssor (sptr n);
             void ins_fixup (sptr n);
-//            void del_fixup (sptr n);
+            void del_fixup (sptr n);
         public :
             tree () {
                 nil = std::make_shared<node>();
@@ -36,7 +36,7 @@ namespace BRTs
             void left_rotate (sptr n);
             void right_rotate (sptr n);
             void ins (node &n);
- //           void del (node &n);
+            void del (node &n);
 
     };
 
@@ -180,5 +180,94 @@ namespace BRTs
         tree::ins_fixup (temp);
     }
 
+    void tree::del_fixup (sptr n) {
+        //n is the labeled node, which has kind "double color"
+        while ( n != root && n->color ) {
+            if ( n == n->parent->left ) {
+                //bro is n's brother
+                sptr bro = n->parent->right;
+                //case 1: bro is red
+                if ( ! bro->color ) {
+                    n->parent->color = 0;
+                    bro->color = 1;
+                    tree::left_rotate(n->parent);
+                    bro = n->parent->right;
+                }
+                //after rotate, case 1 become case 2/3/4
+                //case 2 : bro is black, and both children of bro are black
+                if (  bro->left->color && bro->right->color ) {
+                    bro->color = 0;
+                    n = n->parent;
+                } else {
+                    //case 3 : bro is black and bro->right = red
+                    if ( bro->right->color ) {
+                        bro->left->color = 1;
+                        bro->color =  0;
+                        tree::right_rotate (bro) ;
+                        bro = n->parent->right;
+                    }
+                    //after rotate, case 3 becomes case 4
+                    bro->color = bro->parent->color;
+                    n->parent->color = 1;
+                    tree::left_rotate (n->parent);
+                    n = root;
+                }
+            } else {
+                sptr bro = n->parent->left;
+                if ( ! bro->color ) {
+                    n->parent->color = 0;
+                    bro->color = 1;
+                    tree::right_rotate(n->parent);
+                    bro = n->parent->left;
+                }
+
+                if ( bro->left->color && bro->right->color ) {
+                    bro->color = 0;
+                    n = n->parent;
+                } else {
+                    if ( bro->left->color ) {
+                        bro->right->color = 1;
+                        bro->color = 0;
+                        tree::left_rotate (bro);
+                        bro = n->parent->left;
+                    }
+
+                    bro->color = bro->parent->color;
+                    n->parent->color = 1;
+                    tree::right_rotate (n->parent);
+                    n = root;
+                }
+            }
+        }
+        n->color = 1;
+    }
+
+    void tree::del (node &nd) {
+        sptr n = tree::search (nd.key) ;
+        sptr temp; //node to be deleted
+        if ( n->left == nil || n->right == nil )  
+            temp = n;
+        else 
+            temp = tree::ssor (n) ;
+        sptr x;
+        if ( n->left != nil )  x = n->left;
+        else x = n->right;  
+        x->parent = temp->parent;
+        if ( temp->parent == nil ) {
+            root = x;
+        } else {
+            if ( temp = temp->parent->left ) 
+                temp->parent->left = x;
+            else 
+                temp->parent->right = x;
+        }
+        if ( temp != n ) {
+            n->key = temp->key;
+            n->val = temp->val;
+        }
+        if ( temp->color ) 
+            tree::del_fixup (x);
+    }
 }
+
 #endif
