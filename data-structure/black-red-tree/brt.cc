@@ -10,7 +10,22 @@ int main ()
     T.ins(n4);  T.ins(n5);  T.ins(n6);
     T.inshow();
     T.del (n6); 
-    cout << "After deletel some nodes" << endl;
+    cout << "After deletel node 6" << endl;
+    T.inshow();
+    T.del (n4); 
+    cout << "After deletel node 4" << endl;
+    T.inshow();
+    T.del (n5); 
+    cout << "After deletel node 5" << endl;
+    T.inshow();
+    T.del (n3); 
+    cout << "After deletel node 3" << endl;
+    T.inshow();
+    T.del (n2); 
+    cout << "After deletel node 2" << endl;
+    T.inshow();
+    T.del (n1); 
+    cout << "After deletel node 1" << endl;
     T.inshow();
     return 0;
 }

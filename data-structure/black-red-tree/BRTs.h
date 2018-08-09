@@ -56,9 +56,9 @@ namespace BRTs
         sptr temp = root;
         while ( temp != nil  && temp->key != k) {
             if ( temp->key < k )  temp = temp->right;
-            else temp = temp->right;
+            else temp = temp->left;
         }
-        if ( temp = nil ) throw std::out_of_range ("No such key") ;
+        if ( temp == nil ) throw std::out_of_range ("No such key") ;
         else return temp;
     }
 
