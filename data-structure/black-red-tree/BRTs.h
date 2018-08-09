@@ -25,6 +25,8 @@ namespace BRTs
             sptr min (sptr n);
             sptr search (int k);
             sptr ssor (sptr n);
+            void left_rotate (sptr n);
+            void right_rotate (sptr n);
             void ins_fixup (sptr n);
             void del_fixup (sptr n);
         public :
@@ -33,8 +35,6 @@ namespace BRTs
                 root = nil;
             }
             void inshow () ;
-            void left_rotate (sptr n);
-            void right_rotate (sptr n);
             void ins (node &n);
             void del (node &n);
 
