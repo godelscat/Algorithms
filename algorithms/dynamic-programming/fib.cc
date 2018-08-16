@@ -1,4 +1,5 @@
 #include <iostream>
+#include <ctime>
 using namespace std;
 
 int fib_memoize (int n, int arr[]) {
@@ -26,12 +27,33 @@ int fib_bottom_up (int n) {
 	return result;
 }
 
+int fib_normal (int n) {
+	if ( n <= 2 ) return 1;
+	int result;
+	result = fib_normal(n-1) + fib_normal(n-2);
+	return result;
+}
+
 int main () 
 {
-	const int n = 5;
+	const int n = 20;
 	int arr[n] = {0};
+	clock_t start, end;
+	double msec;
+	start = clock();
 	int result = fib_memoize (n, arr);
-	int test = fib_bottom_up(10);
-	cout << "fib(5) is : " << test << endl;
+	end = clock();
+	msec = double ( end - start ) * 1e6 / CLOCKS_PER_SEC;
+	cout << "memoize method takes : " << msec << " microsecond.\n";
+	start = clock();
+	int test = fib_bottom_up(20);
+	end = clock();
+	msec = double ( end - start ) * 1e6 / CLOCKS_PER_SEC;
+	cout << "bottom to up method takes : " << msec << " microsecond.\n";
+	start = clock();
+	int fib = fib_normal(20);
+	end = clock();
+	msec = double ( end - start ) * 1e6 / CLOCKS_PER_SEC;
+	cout << "normal method takes : " << msec << " microsecond.\n";
 	return 0;
 }
