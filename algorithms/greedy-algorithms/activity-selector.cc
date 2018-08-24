@@ -3,7 +3,7 @@
 #include <map>
 using namespace std;
 
-unordered_map<int, int> greedy_activity_selector ( map<int, int> act ) {
+unordered_map<int, int> greedy_activity_selector ( map<int, int> &act ) {
 	auto m  = act.begin();
 	unordered_map<int, int> result;
 	//resutl first is start time and second is end time
