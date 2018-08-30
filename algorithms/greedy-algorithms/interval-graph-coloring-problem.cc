@@ -8,7 +8,7 @@
 #include <map>
 using namespace std;
 
-vector<int> interal_graph ( map<int, int> act, int& hall_num ) {
+vector<int> interal_graph ( const map<int, int>& act, int& hall_num ) {
 	vector<int> hall = {0};
 	vector<int> close_time = {0};
 	auto p = act.begin();
