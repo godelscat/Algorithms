@@ -12,7 +12,7 @@ struct node {
     std::shared_ptr<node<T>> child;
     std::shared_ptr<node<T>> sibling;
     node (T k) : key(k) { };
-    node ( ) : { };
+    node ( ) { };
 };
 
 template <class T>
@@ -32,6 +32,7 @@ class BinomialHeap {
         void extractMin (); //delete min node
         void decrease (T k1, T k2);
         void remove (T k);
+        bool in (T k); //check if key is in heap
         void print ();
 
     private:
@@ -42,10 +43,11 @@ class BinomialHeap {
         sptr<T> heapMerge (sptr<T> h1, sptr<T> h2);
         sptr<T> treeSearch (sptr<T> root, T k);
         sptr<T> heapSearch (T k);
+        void treePrint (sptr<T> root);
 };
 
 template <class T>
-void BinomialHeap::link (sptr<T> chd, sptr<T> p) {
+void BinomialHeap<T>::link (sptr<T> chd, sptr<T> p) {
     chd->parent = p;
     chd->sibling = p->child;
     p->child = chd;
@@ -53,7 +55,7 @@ void BinomialHeap::link (sptr<T> chd, sptr<T> p) {
 }
 
 template <class T>
-T BinomialHeap::minimum () {
+T BinomialHeap<T>::minimum () {
     sptr<T> temp = head;
     T min = head->key;
     while ( temp ) {
@@ -66,7 +68,7 @@ T BinomialHeap::minimum () {
 }
 
 template <class T>
-sptr<T> BinomialHeap::heapMerge ( sptr<T> h1, sptr<T> h2 ) {
+sptr<T> BinomialHeap<T>::heapMerge ( sptr<T> h1, sptr<T> h2 ) {
     sptr<T> nil = std::make_shared<node<T>>();
     sptr<T> temp = nullptr;
     sptr<T> root = nil;
@@ -91,11 +93,11 @@ sptr<T> BinomialHeap::heapMerge ( sptr<T> h1, sptr<T> h2 ) {
 }
 
 template <class T>
-sptr<T> BinomialHeap::heapUnion ( sptr<T> h1, sptr<T> h2 ) {
-    head = heapMerge ( h1, h2 );
-    if ( !head )  return head;
+sptr<T> BinomialHeap<T>::heapUnion ( sptr<T> h1, sptr<T> h2 ) {
+    sptr<T> h = heapMerge ( h1, h2 );
+    if ( !h )  return h;
     sptr<T> prev_x (nullptr); //prev node of x
-    sptr<T> x = head;
+    sptr<T> x = h;
     sptr<T> next_x = x->sibling; //next node of x
     while ( next_x ) {
         //case 1 and case 2
@@ -105,28 +107,28 @@ sptr<T> BinomialHeap::heapUnion ( sptr<T> h1, sptr<T> h2 ) {
                 x = next_x;
         } else if ( x->key <= next_x->key ) {
             x->sibling = next_x->sibling;
-            link (next_x, x)
+            link (next_x, x);
         } else {
             if ( !prev_x ) 
-                head = next_x;
+                h = next_x;
             else 
                 prev_x->sibling = next_x;
-            link ( x, next_x )
+            link ( x, next_x );
             x = next_x;
         } 
         next_x = x->sibling;
     }
-    return head;
+    return h;
 }
 
 template <class T>
-void BinomialHeap::insert ( T k ) {
+void BinomialHeap<T>::insert ( T k ) {
     sptr<T> h = std::make_shared<node<T>>(k);
     head = heapUnion ( head, h );
 }
 
 template <class T>
-void BinomialHeap::extractMin () {
+void BinomialHeap<T>::extractMin () {
     sptr<T> h = head;
     sptr<T> x = head; //min root
     sptr<T> prev_x = nullptr; //prev of min root
@@ -153,7 +155,7 @@ void BinomialHeap::extractMin () {
     sptr<T> temp = nullptr;
     sptr<T> next = nullptr;
     sptr<T> h_prime = nullptr;
-    chd = x->child;
+    sptr<T> chd = x->child;
     if ( chd ) {
         chd->parent = nullptr;
         while ( chd->sibling ) {
@@ -170,13 +172,81 @@ void BinomialHeap::extractMin () {
 }
 
 template <class T>
-sptr<T> BinomialHeap::treeSearch ( sptr<T> root, T k ) {
-    if ( root && root->key == k ) 
+sptr<T> BinomialHeap<T>::treeSearch ( sptr<T> root, T k ) {
+    if ( root->key == k ) 
         return root;
-    sptr<T> target = nullptr; 
-    target = treeSearch ( root->child, k );
-    if ( target ) return target;
-    target = treeSearch ( root->sibling, k );
-    if ( target ) return target;
-    return nullptr;
+    else if ( root ) {
+        treeSearch ( root->child, k );
+        treeSearch ( root->sibling, k );
+    } else {
+        return nullptr;
+    }
 }
+
+template <class T>
+sptr<T> BinomialHeap<T>::heapSearch ( T k ) {
+    sptr<T> root = head;
+    sptr<T> target = nullptr;
+    if ( !root ) {
+        return nullptr;
+    }
+    while ( root ) {
+        target = treeSearch ( root, k );
+        if ( target ) return target;
+        root = root->sibling;
+    }
+    return target;
+}
+
+template <class T>
+bool BinomialHeap<T>::in (T k) {
+    if ( heapSearch(k) ) 
+        return true;
+    else 
+        return false;
+}
+
+template <class T>
+void BinomialHeap<T>::decrease ( T k1, T k2 ) {
+    if ( k2 >= k1 ) {
+        throw std::invalid_argument ("Input is larger the orginal value");
+    }
+    sptr<T> target = heapSearch (k1);
+    if ( !target ) {
+        throw std::invalid_argument ("Input does not exist");
+    }
+    sptr<T> y = target;
+    sptr<T> z = y->parent;
+    while ( z && z->key > y->key ) {
+        std::swap ( z->key, y->key );
+        y = z;
+        z = z->p;
+    }
+}
+
+template <class T>
+void BinomialHeap<T>::remove (T k) {
+    T temp = minimum() - 11; //random number to make sure temp is the smallest
+    decrease( k, temp );
+    extractMin();
+}
+
+template <class T>
+void BinomialHeap<T>::treePrint ( sptr<T> root ) {
+    if ( root ) {
+        std::cout << "key is : " << root->key << "\n";
+        treePrint ( root->child );
+        treePrint ( root->sibling );
+    }
+}
+
+template <class T>
+void BinomialHeap<T>::print () {
+    sptr<T> root = head;
+    while ( root ) {
+        treePrint (root);
+        root = root->sibling;
+    }
+}
+
+#endif
