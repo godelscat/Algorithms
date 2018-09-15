@@ -101,7 +101,7 @@ sptr<T> BinomialHeap<T>::heapUnion ( sptr<T> h1, sptr<T> h2 ) {
     sptr<T> next_x = x->sibling; //next node of x
     while ( next_x ) {
         //case 1 and case 2
-        if ( x->degree != next_x->degree || ( next_x->sibling && 
+        if ( ( x->degree != next_x->degree ) || ( next_x->sibling && 
             next_x->sibling->degree == x->degree) ) {
                 prev_x = x;
                 x = next_x;
@@ -173,11 +173,13 @@ void BinomialHeap<T>::extractMin () {
 
 template <class T>
 sptr<T> BinomialHeap<T>::treeSearch ( sptr<T> root, T k ) {
-    if ( root->key == k ) 
-        return root;
-    else if ( root ) {
-        treeSearch ( root->child, k );
-        treeSearch ( root->sibling, k );
+    if ( root ) {
+	if ( root->key == k )
+		return root;
+	else {
+		treeSearch ( root->child, k );
+		root = root->sibling;
+	}
     } else {
         return nullptr;
     }
