@@ -51,7 +51,7 @@ void BinomialHeap<T>::link (sptr<T> chd, sptr<T> p) {
     chd->parent = p;
     chd->sibling = p->child;
     p->child = chd;
-    p->degree += 1;
+    p->degree ++;
 }
 
 template <class T>
@@ -173,25 +173,23 @@ void BinomialHeap<T>::extractMin () {
 
 template <class T>
 sptr<T> BinomialHeap<T>::treeSearch ( sptr<T> root, T k ) {
-    if ( root ) {
+    sptr<T> temp = nullptr;
+    while ( root ) {
 	if ( root->key == k )
 		return root;
 	else {
-		treeSearch ( root->child, k );
+		temp = treeSearch ( root->child, k );
+		if ( temp ) return temp;
 		root = root->sibling;
 	}
-    } else {
-        return nullptr;
     }
+    return nullptr;
 }
 
 template <class T>
 sptr<T> BinomialHeap<T>::heapSearch ( T k ) {
     sptr<T> root = head;
     sptr<T> target = nullptr;
-    if ( !root ) {
-        return nullptr;
-    }
     while ( root ) {
         target = treeSearch ( root, k );
         if ( target ) return target;
@@ -217,12 +215,13 @@ void BinomialHeap<T>::decrease ( T k1, T k2 ) {
     if ( !target ) {
         throw std::invalid_argument ("Input does not exist");
     }
+    target->key = k2;
     sptr<T> y = target;
     sptr<T> z = y->parent;
     while ( z && z->key > y->key ) {
         std::swap ( z->key, y->key );
         y = z;
-        z = z->p;
+        z = z->parent;
     }
 }
 
@@ -235,10 +234,10 @@ void BinomialHeap<T>::remove (T k) {
 
 template <class T>
 void BinomialHeap<T>::treePrint ( sptr<T> root ) {
-    if ( root ) {
-        std::cout << "key is : " << root->key << "\n";
+    while ( root ) {
+        std::cout << "key : " << root->key << "\n";
         treePrint ( root->child );
-        treePrint ( root->sibling );
+	root = root->sibling;
     }
 }
 
