@@ -43,7 +43,7 @@ class BinomialHeap {
         sptr<T> heapMerge (sptr<T> h1, sptr<T> h2);
         sptr<T> treeSearch (sptr<T> root, T k);
         sptr<T> heapSearch (T k);
-        void treePrint (sptr<T> root);
+        void heapPrint (sptr<T> root);
 };
 
 template <class T>
@@ -69,6 +69,7 @@ T BinomialHeap<T>::minimum () {
 
 template <class T>
 sptr<T> BinomialHeap<T>::heapMerge ( sptr<T> h1, sptr<T> h2 ) {
+    //nil->sibling is the new root
     sptr<T> nil = std::make_shared<node<T>>();
     sptr<T> temp = nullptr;
     sptr<T> root = nil;
@@ -100,11 +101,13 @@ sptr<T> BinomialHeap<T>::heapUnion ( sptr<T> h1, sptr<T> h2 ) {
     sptr<T> x = h;
     sptr<T> next_x = x->sibling; //next node of x
     while ( next_x ) {
-        //case 1 and case 2
+        //case 1: x->degree != next_x->degree 
+	//case 2: x->degree = next_x->degree = next_x->sibling->degree
         if ( ( x->degree != next_x->degree ) || ( next_x->sibling && 
             next_x->sibling->degree == x->degree) ) {
                 prev_x = x;
                 x = next_x;
+	//case 3 and case 4: x->degree = next_x->degree != next_x->sibling->degree
         } else if ( x->key <= next_x->key ) {
             x->sibling = next_x->sibling;
             link (next_x, x);
@@ -168,6 +171,7 @@ void BinomialHeap<T>::extractMin () {
         chd->sibling = temp;
         h_prime = chd;
     }
+    x = nullptr;
     head = heapUnion ( head, h_prime );
 }
 
@@ -233,10 +237,10 @@ void BinomialHeap<T>::remove (T k) {
 }
 
 template <class T>
-void BinomialHeap<T>::treePrint ( sptr<T> root ) {
+void BinomialHeap<T>::heapPrint( sptr<T> root ) {
     while ( root ) {
         std::cout << "key : " << root->key << "\n";
-        treePrint ( root->child );
+        heapPrint ( root->child );
 	root = root->sibling;
     }
 }
@@ -244,10 +248,7 @@ void BinomialHeap<T>::treePrint ( sptr<T> root ) {
 template <class T>
 void BinomialHeap<T>::print () {
     sptr<T> root = head;
-    while ( root ) {
-        treePrint (root);
-        root = root->sibling;
-    }
+    heapPrint (root);
 }
 
 #endif
