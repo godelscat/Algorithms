@@ -50,7 +50,7 @@ void BinaryIndexedTree<T>::update (int idx, T delta) {
 template <class T>
 T BinaryIndexedTree<T>::prefixSum (int idx) {
     idx += 1;
-    T result;
+    T result = 0;
     while (idx > 0) {
         result += biTree[idx];
         idx -= lowbit(idx);
