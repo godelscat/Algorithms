@@ -66,6 +66,22 @@ class Graph:
                     self.time = self.time + 1
                     temp.f = self.time
 
+    def isCycle(self):
+        for u in self.vertex.values():
+            if u.color == "WHITE":
+                return self._isCycle(u)
+        return False
+
+    def _isCycle(self, u):
+        u.color = "GRAY"
+        for v in self.edges[u.label]:
+            if v.color == "WHITE":
+                self._isCycle(v)
+            elif v.color == "GRAY":
+                return True
+        u.color == "BLACK"
+        return False
+
 
 if __name__ == "__main__":
     g = Graph(4)
@@ -77,9 +93,15 @@ if __name__ == "__main__":
     g.addEdge(n2, n0)
     g.addEdge(n2, n3)
     g.addEdge(n3, n3)
-    g.dfs()
+    #g.dfs()
     #g.dfs_visit(n2, 0)
     #g.dfs_stack()
-    print("\n")
+    #print("\n")
+    """
     for key, val in g.vertex.items():
         print(key, " ---start-time--- ", val.d, " ---end-time--- ", val.f)
+    """
+    if g.isCycle():
+        print("cycle exist")
+    else:
+        print("No cycle")
