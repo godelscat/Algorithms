@@ -16,51 +16,55 @@ class Node:
 class Graph:
     def __init__(self, V):
         self.V = V
-        self.vertex = set()
+        self.time = 0
+        self.vertex = {}
         self.edges = defaultdict(list)
     
     def addEdge(self, u, v):
         self.edges[u.label].append(v)
-        self.vertex.update([u, v])
+        if u.label not in self.vertex:
+            self.vertex[u.label] = u
+        if v.label not in self.vertex:
+            self.vertex[v.label] = v
     
     def dfs(self):
-        time = 0
-        for u in self.vertex:
+        self.time = 0
+        for u in self.vertex.values():
             if u.color == "WHITE":
-                self.dfs_visit(u, time)
+                self.dfs_visit(u)
     
-    def dfs_visit(self, u, time):
-        time = time + 1
+    def dfs_visit(self, u):
+        self.time = self.time + 1
         u.color = "GRAY"
-        u.d = time
+        u.d = self.time
         print(u.label, " -> ", end=" ")
         for v in self.edges[u.label]:
             if v.color == "WHITE":
                 v.p = u
-                self.dfs_visit(v, time)
+                self.dfs_visit(v)
         u.color = "BLACK"
-        time = time + 1
-        u.f = time
+        self.time = self.time + 1
+        u.f = self.time
     
     def dfs_stack(self):
-        time = 0
+        self.time = 0
         stack = []
-        for u in self.vertex:
+        for u in self.vertex.values():
             if u.color == "WHITE":
                 u.color = "GRAY"
                 stack.append(u)
                 while stack:
-                    time = time + 1
+                    self.time = self.time + 1
                     temp = stack.pop()
-                    temp.d = time
+                    temp.d = self.time
                     print(temp.label, " -> ", end=" ")
                     for v in self.edges[temp.label]:
                         if v.color == "WHITE":
                             v.p = temp
                             v.color = "GRAY"
                             stack.append(v)
-                    time = time + 1
-                    temp.f = time
+                    self.time = self.time + 1
+                    temp.f = self.time
 
 
 if __name__ == "__main__":
@@ -73,8 +77,9 @@ if __name__ == "__main__":
     g.addEdge(n2, n0)
     g.addEdge(n2, n3)
     g.addEdge(n3, n3)
-    #g.dfs()
+    g.dfs()
     #g.dfs_visit(n2, 0)
-    g.dfs_stack()
-
+    #g.dfs_stack()
     print("\n")
+    for key, val in g.vertex.items():
+        print(key, " ---start-time--- ", val.d, " ---end-time--- ", val.f)
