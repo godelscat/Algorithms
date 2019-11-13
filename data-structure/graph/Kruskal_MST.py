@@ -7,6 +7,7 @@ Steps to find MST using Kruskal's algorithm:
     3. Repeat step#2 until there are (V-1) edges in the spanning tree.
 
 NOTE: The edge of this UNDIRECTED graph only register once for each pair of vertex.
+        RUNTIME O(Elg(V))
 """
 
 from collections import defaultdict
