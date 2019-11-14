@@ -13,7 +13,9 @@ MST-PRIM(G, w, r):
                 v.key = w(u, v)
 
 NOTE: Use HEAP to implement Q; 
-      RUNTIME is O(V lgV + E lgV) = O(E lgV)
+      IDEAL RUNTIME is O(V lgV + E lgV) = O(E lgV); 
+      In fact, even though Heap is used, we stil cannot achieve O(E lgV) time,
+      because searching node(index) in HEAP takes O(V) time.
 """
 
 from collections import defaultdict
@@ -27,35 +29,40 @@ class Graph:
         self.parent = {}
         self.mst = []
         self.queue = [] # list of (key, vertex)
-        self.key = {} # keep track of key and isIn
+        self.key = {} # keep track of key
+        self.index = {} # keep track of isIn queue
         self.edges = defaultdict(list)
     
+    # Input: each undirected edge only add once
     def addEdge(self, u, v, w):
         self.edges[u].append((v, w))
+        self.edges[v].append((u, w))
         if u not in self.key:
             self.queue.append([INF, u])
             self.parent[u] = u
-            self.key[u] = [True, INF]
+            self.key[u] = INF
+            self.index[u] = True
         if v not in self.key:
             self.queue.append([INF, v])
             self.parent[v] = v
-            self.key[v] = [True, INF]
+            self.key[v] = INF
+            self.index[v] = True
 
     def prim_mst(self):
         r = self.queue[0][1]
         self.queue[0][0] = 0
-        self.key[r][1] = 0
+        self.key[r] = 0
         heapq.heapify(self.queue)
         while self.queue:
-            w_u, u = heapq.heappop(self.queue)
-            self.key[u][0] = False # remove u
+            _, u = heapq.heappop(self.queue)
+            self.index[u] = False # remove u
             self.mst.append(u)
             for v, w in self.edges[u]:
-                if self.key[v][0] and w < self.key[v][1]:
+                if self.index[v] and w < self.key[v]:
                     self.parent[v] = u
-                    idx = self.queue.index([self.key[v][1], v])
+                    idx = self.queue.index([self.key[v], v]) # this takes O(V) time
                     self.queue[idx][0] = w
-                    self.key[v][1] = w
+                    self.key[v] = w
                     heapq._siftdown(self.queue, 0, idx)
 
 if __name__ == "__main__":
@@ -76,4 +83,4 @@ if __name__ == "__main__":
     g.addEdge(4, 5, 10)
     g.prim_mst()
     for u in g.mst:
-        print("{0} ----> {1} | {2}".format(u, g.parent[u], g.key[u][1]))
+        print("{0} ----> {1} | {2}".format(u, g.parent[u], g.key[u]))
