@@ -59,7 +59,7 @@ class Graph:
                     self.mst.append((w, u, v))
                     self.union(u_root, v_root)
                 if len(self.mst) >= self.V - 1:
-                    break
+                    return
 
 if __name__ == "__main__":
     g = Graph(9)
