@@ -35,7 +35,6 @@ class Graph:
         self.key = {} # store priority d
         self.queue = [] # priority queue
         self.edges = defaultdict(list)
-        self.dijk = []
     
     def addEdge(self, u, v, w):
         self.edges[u].append((v, w))
@@ -66,7 +65,6 @@ class Graph:
         heapq.heapify(self.queue)
         while self.queue:
             _, u = heapq.heappop(self.queue)
-            self.dijk.append(u)
             for v, w in self.edges[u]:
                 self._relax(u, v, w)
 
